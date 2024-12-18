@@ -1,7 +1,12 @@
 target/
+Puzzle App/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+file.xml
+*.ico
+*.log
+*.exe
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
