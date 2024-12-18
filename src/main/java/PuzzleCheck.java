@@ -1,5 +1,6 @@
+import java.util.HashSet;
 import java.util.List;
-import java.util.Scanner;
+import java.util.Set;
 
 public class PuzzleCheck {
 
@@ -13,41 +14,53 @@ public class PuzzleCheck {
         List<String> lineList = FileToList.getList();
 
         StringBuilder result = new StringBuilder();
-        String firstResult = "";
+
+        Set<String> usedLines = new HashSet<>();
 
         for (int i = 0; i < lineList.size(); i++) {
             if (!result.isEmpty()) {
                 break;
-            } else if (lineList.get(i) != null) {
+            } else if (lineList.get(i) != null || !lineList.get(i).isEmpty()) {
                 String currentLine = lineList.get(i);
                 for (int j = 0; j < lineList.size(); j++) {
                     if (i != j) {
                         String otherLine = lineList.get(j);
                         if (currentLine.substring(0, 2).equals(otherLine.substring(otherLine.length() - 2))){
                             result.append(currentLine);
-                            firstResult = currentLine;
+                            usedLines.add(currentLine);
+                            break;
                         }else if (currentLine.substring(currentLine.length() - 2).equals(otherLine.substring(0,2))) {
                             result.append(currentLine);
-                            firstResult = currentLine;
+                            usedLines.add(currentLine);
+                            break;
                         }
                     }
                 }
             }
         }
 
-        for (int i = 0; i < lineList.size(); i++) {
+        boolean added;
 
-            String current = lineList.get(i);
+        do {
+            added = false;
 
-            if (lineList.get(i) != null || !lineList.get(i).isEmpty() || !current.equals(firstResult)) {
-                if (current.substring(0, 2).equals(result.substring(result.length() - 2))) {
-                    result.append(current.substring(2));
-                } else if (current.substring(current.length() - 2).equals(result.substring(0, 2))) {
-                    result.insert(0, current.substring(0, current.length() - 2));
+            for (String line : lineList) {
+                if (line == null || line.isEmpty() || usedLines.contains(line)) {
+                    continue;
+                }
+                if (line.substring(0, 2).equals(result.substring(result.length() - 2))) {
+                    result.append(line.substring(2));
+                    usedLines.add(line);
+                    added = true;
+                    break;
+                } else if (line.substring(line.length() - 2).equals(result.substring(0, 2))) {
+                    result.insert(0, line.substring(0, line.length() - 2));
+                    usedLines.add(line);
+                    added = true;
+                    break;
                 }
             }
-
-        }
+        } while (added);
 
         return result;
 
